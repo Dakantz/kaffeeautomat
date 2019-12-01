@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <title>
-          Kaffeeautomat
-      </title>
+    <title>
+      Kaffeeautomat
+    </title>
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
       rel="stylesheet"
@@ -115,7 +115,7 @@
               },
               {
                 amount: 100,
-                display: "2€"
+                display: "1€"
               },
               {
                 amount: 50,
@@ -194,7 +194,7 @@
                 this.moneyInserted -= cdata.cost;
                 while (this.moneyInserted > 0) {
                   let greatestCoin = this.coins.find(coin => {
-                    return coin.amount <= this.moneyInserted;
+                    return this.moneyInserted - coin.amount >= 0;
                   });
                   this.moneyInserted -= greatestCoin.amount;
                   this.returnedMoney.push(greatestCoin);
@@ -204,16 +204,16 @@
                 await this.awaitTimer(cdata.makeTime * 1000);
                 this.message = "Genieße deinen Kaffee!";
                 await this.awaitTimer(1000);
-                this.blockedStandard = false;
-                this.showStandardStatus();
               } else {
                 this.message = "Nicht genügend Geld!";
                 await this.awaitTimer(5000);
-                this.showStandardStatus();
               }
             } else {
               this.message = "ERROR";
             }
+
+            this.blockedStandard = false;
+            this.showStandardStatus();
           }
         }
       });
