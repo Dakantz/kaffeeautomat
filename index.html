@@ -48,7 +48,7 @@
             </v-card>
             <v-card class="mx-auto card_extra">
               <v-card-title>
-                Wirf ein wenig Geld ein:
+                Wirf ein wenig Geld ein: 💸
               </v-card-title>
               <v-card-text>
                 <v-btn
@@ -61,6 +61,24 @@
                   @click="insertMoney(coin.amount)"
                 >
                   <v-icon left>mdi-attach_money</v-icon> {{coin.display}}
+                </v-btn>
+              </v-card-text>
+            </v-card>
+            <v-card class=" mx-auto card_extra">
+              <v-card-title>
+                Stell deinen Zuckerlevel ein 🍬
+              </v-card-title>
+              <v-card-text>
+                <v-progress-linear
+                  v-model="sugarPercentage"
+                  background-opacity="0.10"
+                  height="15px"
+                ></v-progress-linear>
+                <v-btn class="ma-2" outlined @click="changeSugar(-1)">
+                  -
+                </v-btn>
+                <v-btn class="ma-2" outlined @click="changeSugar(1)">
+                  +
                 </v-btn>
               </v-card-text>
             </v-card>
@@ -103,6 +121,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script>
+      const SUGAR_MAX = 5;
+      const SUGAR_MIN = -5;
       var vue_coffee = new Vue({
         data: () => {
           return {
@@ -154,6 +174,7 @@
                 name: "250ml Kaffee"
               }
             },
+            sugar: 0,
             returnedMoney: [],
             blockedStandard: false
           };
@@ -166,6 +187,11 @@
             handler(newVal, oldVal) {
               if (!this.blockedStandard) this.showStandardStatus();
             }
+          }
+        },
+        computed: {
+          sugarPercentage() {
+            return ((this.sugar - SUGAR_MIN) / (SUGAR_MAX - SUGAR_MIN)) * 100;
           }
         },
         methods: {
@@ -184,6 +210,13 @@
               setTimeout(() => resolve(""), ms);
             });
           },
+          changeSugar(amount) {
+            let newSugar = this.sugar + amount;
+            if (newSugar >= SUGAR_MIN && newSugar <= SUGAR_MAX) {
+              this.sugar = newSugar;
+              console.log(this.sugar);
+            }
+          },
           async makeCoffee(type) {
             type = type || "cheap";
             let cdata = this.coffees[type];
@@ -201,6 +234,7 @@
                   await this.awaitTimer(100);
                 }
                 this.makeCoffeeInreality();
+                this.sugar = 0;
                 await this.awaitTimer(cdata.makeTime * 1000);
                 this.message = "Genieße deinen Kaffee!";
                 await this.awaitTimer(1000);
