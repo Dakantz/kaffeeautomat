@@ -94,7 +94,7 @@
                   outlined
                   @click="makeCoffee(id)"
                 >
-                  {{coffee.name}}
+                  {{coffee.name}} ({{coffee.costDisplay}})
                 </v-btn>
               </v-card-text>
             </v-card>
@@ -165,11 +165,13 @@
             coffees: {
               cheap: {
                 cost: 60,
+                costDisplay: "0.60€",
                 makeTime: 10,
                 name: "125ml Kaffee"
               },
               normal: {
                 cost: 80,
+                costDisplay: "0.80€",
                 makeTime: 20,
                 name: "250ml Kaffee"
               }
